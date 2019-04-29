@@ -30,7 +30,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
         // Using Recycler Adapter instead of List Adapter to implement "ItemTouchHelper -> onSwiped" method in MainActivity
         //RecyclerAdapter doesn't have a method to control cursor hence we use CursorAdapter as an object of Recycler Adapter
-        //In case onSwiped method is not required use List Adapter with custom Cursor Adapter class  
+        //In case onSwiped method is not required use List Adapter with custom Cursor Adapter class
         mCursorAdapter = new CursorAdapter(mContext, c, 0) {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
