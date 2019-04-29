@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="weight_units_array">
+        <item>Select</item>
+        <item>gm(s)</item>
+        <item>kg(s)</item>
+        <item>L(s)</item>
+    </string-array>
+</resources>
