@@ -68,15 +68,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Get a readable database from custom Database Handler (DataBaseHandler in this)
         db = handler.getReadableDatabase();
+
         //db holds the whole database, we only require a certain table (not even all the colums most of the time), hence use a cursor
         cursor = db.rawQuery("SELECT * FROM Items_Table", null);
         RecyclerView Rv = (RecyclerView) findViewById(R.id.list_item);
+
         //RecyclerView requires a Layout Manager
         layoutManager = new LinearLayoutManager(this);
         Rv.setLayoutManager(layoutManager);
+
         //Custom RecyclerView Adapter
         listadapter = new MyRecyclerAdapter(this, cursor);
+
         //Linking RecyclerView with RecyclerView Adapter. Adapter will take care of updating the views.
+
         Rv.setAdapter(listadapter);
 
 
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 try {
                     double total = 0;
                     db = handler.getReadableDatabase();
+
                     Cursor _cursor = db.rawQuery("SELECT Quantity,Price FROM Items_Table", null); //Only requires Price column from the table for this operation,
                     //also used local cursor for this.
 
@@ -101,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
 
                     _cursor.close(); // Closing local cursor.
+
                     Total.setText("" + total);
+
                 } catch (Exception e) {
 
                     Log.d("Calculating Price", e.getMessage());
@@ -114,19 +122,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
                 try {
+
                     _item_Name = item_Name.getText().toString();
                     _quantity = Integer.parseInt(quantity.getText().toString());
+
                     try {
+
                         _price = Double.parseDouble(price.getText().toString());
+
                     } catch (Exception e1) {
+
                         _price = 0;
+
                     }
 
                     try {
+
                         _weight = Double.parseDouble(weight.getText().toString());
+
                     } catch (Exception e2) {
+
                         _weight = 0;
                         Log.d("Error Message", e2.getMessage() + _weight);
+
                     }
 
                     handler.Additem(_item_Name, _quantity, _weight, _weight_measurement, _price); //Inserting user input to table row-by-row.
@@ -159,20 +177,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+
                 return false;
+
             }
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
                 //Feature allowing user to delete a row
                 int position = viewHolder.getAdapterPosition() + 1;
                 Log.d("Row number", "Selected row is " + position);
+
                 db = handler.getReadableDatabase();
                 db.delete("Items_Table", "_id" + "=?", new String[]{String.valueOf(position)}); //Deleting a row based on Adapter position
+
                 //Deleting a row requires updating database and hence the View.
                 handler.UpdateDatabase();
+
                 listadapter.newCursor();    //New cursor since database is changed
                 listadapter.notifyDataSetChanged();
+
                 Calculate.callOnClick();
             }
         });
@@ -181,13 +206,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
+
         //Override methods for retrieving spinner data
         _weight_measurement = String.valueOf(parent.getItemAtPosition(pos)); // Better to use String.valueOf() rather than .toString().
+
         if (!_weight_measurement.equals("Select")) {
+
             Log.d("pos val", "Item Selected is " + parent.getItemAtPosition(pos));
             // Toast.makeText(parent.getContext(), "Item selected is " + _weight_measurement, Toast.LENGTH_SHORT).show();
+
         } else
+
             _weight_measurement = "";
+
     }
 
 

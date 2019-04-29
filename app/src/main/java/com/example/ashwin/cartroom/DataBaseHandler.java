@@ -35,6 +35,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         //Creating table for first time
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + COLUMN_ID + " INTEGER PRIMARY KEY," + COLUMN_NAME + " TEXT NOT NULL UNIQUE," + COLUMN_QUANTITY + " INTEGER NOT NULL," + COLUMN_WEIGHT + " REAL," + COLUMN_PRICE + " REAL" + ")";
         Log.d("Database", "Execute " + CREATE_TABLE);
+
         db.execSQL(CREATE_TABLE);
         Log.d("Database", "Created Table Successfully");
     }
@@ -50,16 +51,22 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
 
     public void Additem(String ItemName, int Quantity, double Weight, String Weight_Measurement, double Price) {
+
         SQLiteDatabase db = this.getWritableDatabase();
 
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, ItemName);
         values.put(COLUMN_QUANTITY, Quantity);
+
         if(Weight != 0) {
+
             values.put(COLUMN_WEIGHT, Weight + "" + Weight_Measurement);
+
         } else{
+
             values.put(COLUMN_WEIGHT,"-");
+
         }
         values.put(COLUMN_PRICE, Price);
 
@@ -70,6 +77,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
 
     public void Additem(String ItemName, int Quantity, String Weight, double Price) {
+
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -109,7 +117,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 items.setPrice(Double.parseDouble(cursor.getString(4)));
 
                 ItemList.add(items);
-                Log.d("Items List", items.getWeight());
             } while (cursor.moveToNext());
 
 

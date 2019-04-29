@@ -32,14 +32,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         //RecyclerAdapter doesn't have a method to control cursor hence we use CursorAdapter as an object of Recycler Adapter
         //In case onSwiped method is not required use List Adapter with custom Cursor Adapter class
         mCursorAdapter = new CursorAdapter(mContext, c, 0) {
+
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
+
                 return LayoutInflater.from(context).inflate(R.layout.item_container, parent, false);
                 //Inflate the view layout decided to be used in Recycler View
+
             }
 
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
+
                 //Binding data to the view.
                 // WHEN USING CUSTOM ADAPTER MAKE SURE THERE IS A COLUMN WITH _id. HENCE IT WILL THROW ERROR.
                 TextView item_no = view.findViewById(R.id.Item_id);
@@ -51,6 +55,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 //The app allows user to change or add price after inserted into table, hence we need textchangedlistner.
                 final int position = cursor.getInt(cursor.getColumnIndexOrThrow("_id")); //get the posiotin outside the listner because inside the loop we will have to define
                 //cursor as final which will cause error for other operations.
+
                 _Price.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -59,16 +64,23 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
                         String new_price = charSequence.toString();
                         handler = new DataBaseHandler(mContext);
                         SQLiteDatabase db = handler.getReadableDatabase();
                         ContentValues value = new ContentValues();
+
                         try {
+
                             value.put("Price", Double.parseDouble(new_price));
+
                         } catch (Exception e) {
+
                             Log.d("RecyclerEditText", e.getMessage());
                             value.put("Price", 0.0);
+
                         }
+
                         db.update("Items_Table", value, "_id" + "=?", new String[]{String.valueOf(position)});
                     }
 
@@ -91,7 +103,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 _item_Name.setText(Item_name);
                 _Quantity.setText(String.valueOf(Quantity));
                 _Weight.setText(String.valueOf(Weight));
-                Log.d("Value", "Weight is " + Weight);
                 //_Weight_Measurement.setText(Weight_Measurement);
                 _Price.setText((String.valueOf(Price)));
             }
@@ -100,8 +111,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     }
 
     public void newCursor() {
+
         handler = new DataBaseHandler(mContext);
         SQLiteDatabase db = handler.getReadableDatabase();
+
         Cursor cursor = db.rawQuery("SELECT * FROM Items_Table", null);
         mCursorAdapter.changeCursor(cursor);
     }

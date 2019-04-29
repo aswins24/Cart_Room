@@ -14,6 +14,7 @@ public class Items {
     }
     //Items class act as a custom data type which can hold data from database.
     public Items(int id, String item_Name, int quantity, String weight, double price) {
+
         this._id = id;
         this._item_Name = item_Name;
         this._quantity = quantity;
