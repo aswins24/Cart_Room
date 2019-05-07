@@ -100,7 +100,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 double Price = cursor.getDouble(cursor.getColumnIndexOrThrow("Price"));
 
                 item_no.setText(String.valueOf(_item_no));
-                _item_Name.setText(Item_name);
+                _item_Name.setText(Item_name + "\n"); //Adding a new line with text in order to avoid clipping of view due to wrap_content
                 _Quantity.setText(String.valueOf(Quantity));
                 _Weight.setText(String.valueOf(Weight));
                 //_Weight_Measurement.setText(Weight_Measurement);
