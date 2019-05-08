@@ -17,6 +17,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private String _item_Name;
@@ -24,10 +26,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private double _weight;
     private String _weight_measurement;
     private double _price;
-    private MyRecyclerAdapter listadapter;
+    private UpdatedRecyclerAdapter listadapter;
     private SQLiteDatabase db;
     private Cursor cursor;
     private RecyclerView.LayoutManager layoutManager;
+    private List<Items> data_items;
 
 
     // Two phases for completing the program.
@@ -66,11 +69,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         quantity.setHint("Quantity");
         price.setHint("Price/Quantity");
 
-        // Get a readable database from custom Database Handler (DataBaseHandler in this)
-        db = handler.getReadableDatabase();
 
-        //db holds the whole database, we only require a certain table (not even all the colums most of the time), hence use a cursor
-        cursor = db.rawQuery("SELECT * FROM Items_Table", null);
         RecyclerView Rv = (RecyclerView) findViewById(R.id.list_item);
 
         //RecyclerView requires a Layout Manager
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Rv.setLayoutManager(layoutManager);
 
         //Custom RecyclerView Adapter
-        listadapter = new MyRecyclerAdapter(this, cursor);
+        listadapter = new UpdatedRecyclerAdapter(this);
 
         //Linking RecyclerView with RecyclerView Adapter. Adapter will take care of updating the views.
 
@@ -89,31 +88,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Calculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    double total = 0;
-                    db = handler.getReadableDatabase();
 
-                    Cursor _cursor = db.rawQuery("SELECT Quantity,Price FROM Items_Table", null); //Only requires Price column from the table for this operation,
-                    //also used local cursor for this.
 
-                    if (_cursor.moveToFirst()) {
+                Total.setText("" + listadapter.Calculate());
 
-                        do {
-
-                            total += Integer.parseInt(_cursor.getString(0)) * Double.parseDouble(_cursor.getString(1)); //Converting string to double
-
-                        } while (_cursor.moveToNext());
-
-                    }
-
-                    _cursor.close(); // Closing local cursor.
-
-                    Total.setText("" + total);
-
-                } catch (Exception e) {
-
-                    Log.d("Calculating Price", e.getMessage());
-                }
             }
         });
 
@@ -163,8 +141,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     //In case any database operation fails
                 }
 
-
-                listadapter.newCursor(); //Cursor holds old data, need to change that.
+                listadapter.LoadNewData();
                 listadapter.notifyDataSetChanged(); //Notifying list adapter that data set is changed
                 Calculate.callOnClick();
 
@@ -195,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 //Deleting a row requires updating database and hence the View.
                 handler.UpdateDatabase();
 
-                listadapter.newCursor();    //New cursor since database is changed
+                listadapter.LoadNewData();
                 listadapter.notifyDataSetChanged();
 
                 Calculate.callOnClick();
