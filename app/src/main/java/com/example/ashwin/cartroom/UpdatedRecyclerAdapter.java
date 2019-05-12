@@ -79,7 +79,7 @@ public class UpdatedRecyclerAdapter extends RecyclerView.Adapter<UpdatedRecycler
 
         for (Items it : Data) {
 
-            total += it.getPrice();
+            total += it.getPrice()*it.getQuantity();
         }
         return total;
     }
