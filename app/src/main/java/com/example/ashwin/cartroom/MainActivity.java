@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Cursor cursor;
     private RecyclerView.LayoutManager layoutManager;
     private List<Items> data_items;
+    private RecyclerView Rv;
 
 
     // Two phases for completing the program.
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         price.setHint("Price/Quantity");
 
 
-        RecyclerView Rv = (RecyclerView) findViewById(R.id.list_item);
+        Rv = (RecyclerView) findViewById(R.id.list_item);
 
         //RecyclerView requires a Layout Manager
         layoutManager = new LinearLayoutManager(this);
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     //In case any database operation fails
                 }
 
+
                 listadapter.LoadNewData();
                 listadapter.notifyDataSetChanged(); //Notifying list adapter that data set is changed
                 Calculate.callOnClick();
@@ -167,10 +169,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.d("Row number", "Selected row is " + position);
 
                 db = handler.getReadableDatabase();
-                db.delete("Items_Table", "_id" + "=?", new String[]{String.valueOf(position)}); //Deleting a row based on Adapter position
+                db.delete("items_Table", "_id" + "=?", new String[]{String.valueOf(position)}); //Deleting a row based on Adapter position
 
                 //Deleting a row requires updating database and hence the View.
                 handler.UpdateDatabase();
+                db.close();
+
 
                 listadapter.LoadNewData();
                 listadapter.notifyDataSetChanged();
@@ -180,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
         itemTouchHelper.attachToRecyclerView(Rv);
     }
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
@@ -197,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             _weight_measurement = "";
 
     }
+
 
 
     @Override

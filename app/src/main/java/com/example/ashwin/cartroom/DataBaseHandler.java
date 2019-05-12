@@ -16,8 +16,8 @@ import java.util.List;
 public class DataBaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "ShoppingDataBase";
-    private static final String TABLE_NAME = "Items_Table";
+    private static final String DATABASE_NAME = "Shopping_DataBase";
+    private static final String TABLE_NAME = "items_Table";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_NAME = "Item_name";
     private static final String COLUMN_QUANTITY = "Quantity";
@@ -122,7 +122,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
         }
         cursor.close();
-        //db.close();
+        db.close();
         return ItemList;
     }
 
@@ -143,5 +143,10 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     }
 
+    public void UpdatePrice(ContentValues value, int pos){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.update(TABLE_NAME,value,"_id"+"=?", new String[]{String.valueOf(pos)});
+        db.close();
+    }
 
 }
