@@ -79,7 +79,7 @@ public class UpdatedRecyclerAdapter extends RecyclerView.Adapter<UpdatedRecycler
 
         for (Items it : Data) {
 
-            total += it.getPrice()*it.getQuantity();
+            total += it.getPrice() * it.getQuantity();
         }
         return total;
     }
@@ -122,7 +122,13 @@ public class UpdatedRecyclerAdapter extends RecyclerView.Adapter<UpdatedRecycler
                             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                                 ContentValues value = new ContentValues();
-                                value.put("Price", Double.parseDouble(price.getText().toString().trim()));
+                                double Price;
+                                try {
+                                    Price = Double.parseDouble(price.getText().toString().trim());
+                                } catch (Exception e) {
+                                    Price = 0.0;
+                                }
+                                value.put("Price", Price);
                                 int pos = Integer.parseInt(item_no.getText().toString().trim());
                                 handler.UpdatePrice(value, pos);
 
@@ -134,7 +140,7 @@ public class UpdatedRecyclerAdapter extends RecyclerView.Adapter<UpdatedRecycler
                             }
                         });
 
-                    }else{
+                    } else {
 
                         price.removeTextChangedListener(new TextWatcher() {
                             @Override

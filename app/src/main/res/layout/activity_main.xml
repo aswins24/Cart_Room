@@ -19,6 +19,7 @@
             android:id ="@+id/item_Name"
             android:textSize="12sp"
             android:layout_width="0dp"
+            android:inputType="textCapWords"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:layout_weight="1"/>
@@ -117,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Price"/>
+            android:text="Price/Qty"/>
     </LinearLayout>
     <View style="@style/Divider"/>
     <android.support.v7.widget.RecyclerView

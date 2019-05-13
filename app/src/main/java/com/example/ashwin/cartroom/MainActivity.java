@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     } catch (Exception e1) {
 
-                        _price = 0;
+                        _price = 0.0;
 
                     }
 
